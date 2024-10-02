@@ -1,0 +1,62 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.editor-container {
+  border: 1px solid white; /* Bordure blanche de 2 pixels */
+  border-radius: 4px;      /* Arrondi des coins (optionnel) */
+  overflow: hidden;         /* Évite que le contenu déborde */
+}
+
+.custom-label {
+  margin-bottom: 0px; /* Ajustez la valeur ici */
+}
+
+
+.btn-docs {
+  background-color: white; /* Fond blanc */
+  color: black; /* Texte noir */
+  border-radius: 12px; /* Ajustez le rayon de bordure selon vos besoins */
+  padding: 10px 20px; /* Ajoutez un peu de rembourrage */
+  text-decoration: none; /* Supprimez le soulignement */
+}
+
+.btn-docs:hover {
+  background-color: #673c3c; /* Changez la couleur au survol si désiré */
+}
