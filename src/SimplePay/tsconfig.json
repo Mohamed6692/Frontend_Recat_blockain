@@ -1,24 +1,35 @@
 {
     "compilerOptions": {
-        "target": "ES2020",
-        "experimentalDecorators": true,
-        "useDefineForClassFields": false,
-        "module": "ESNext",
-        "lib": ["ES2021", "DOM", "DOM.Iterable"],
-        "skipLibCheck": true,
-
-        /* Bundler mode */
-        "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
-        "isolatedModules": true,
-        "moduleDetection": "force",
-        "noEmit": true,
-
-        /* Linting */
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+      "target": "ES2020", // Vous pouvez ajuster selon vos besoins
+      "lib": [
+        "ES2021", 
+        "DOM", 
+        "DOM.Iterable", 
+        "esnext" // Inclut 'esnext' pour couvrir les deux configurations
+      ],
+      "types": ["node"], // Assurez-vous que 'node' est inclus
+      "experimentalDecorators": true,
+      "useDefineForClassFields": false,
+      "module": "ESNext",
+      "moduleResolution": "node", // Assurez-vous que cela correspond à votre environnement
+      "allowJs": true, // Autorise les fichiers JavaScript
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "strict": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "forceConsistentCasingInFileNames": true,
+      "noFallthroughCasesInSwitch": true,
+      "isolatedModules": true,
+      "noEmit": true,
+      "resolveJsonModule": true,
+      "jsx": "react-jsx", // Utilisez "react-jsx" pour la compatibilité avec React 17+
+      "allowImportingTsExtensions": false,
+      "moduleDetection": "force"
     },
-    "include": ["src"]
-}
+    "include": [
+      "src/**/*" // Inclut tous les fichiers .ts, .tsx et .js dans le dossier src
+    ]
+  }
+  
