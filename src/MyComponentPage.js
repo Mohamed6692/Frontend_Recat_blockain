@@ -4,18 +4,34 @@ import '@simplepay-ai/widget';
 import Main from './SimplePay/Main';
 import Editor from '@monaco-editor/react';
 import './App.css';
-import Wallet from './Wallet';
+import Appwal from './cnx/src/App.tsx'
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Blockchain from './blockchain';
-
-import {
-  apiProvider,
-  configureChains,
-  getDefaultWallets,
-  RainbowKitProvider,
-  ConnectButton
-} from '@rainbow-me/rainbowkit';
-import { chain, createClient, WagmiProvider } from 'wagmi';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Pour activer les tooltips
+import TooltipIcon from './Info';
 import '@rainbow-me/rainbowkit/styles.css';
+import './index.css';
+import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider } from 'wagmi';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { config } from './cnx/src/wagmi.ts';
+import './App.css';
+// import {
+//   apiProvider,
+//   configureChains,
+//   getDefaultWallets,
+//   RainbowKitProvider,
+//   ConnectButton
+// } from '@rainbow-me/rainbowkit';
+// import { chain, createClient, WagmiProvider } from 'wagmi';
+// import '@rainbow-me/rainbowkit/styles.css';
+
+const queryClient = new QueryClient();
+
+  
+
 
 
 function MyComponentPage() {
@@ -25,6 +41,7 @@ function MyComponentPage() {
   const [labelActive, setLabelActive] = useState(false);
   const [showConnectButton, setShowConnectButton] = useState(false); // State to handle Connect Wallet visibility
   const [creditBalance, setCreditBalance] = useState(100);
+  
   
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -46,8 +63,7 @@ function MyComponentPage() {
 
   
   const handleProcessText = () => {
-    // Ajoutez 'C/>' devant le texte saisi
-    const formattedText = `C/>${inputText}`;
+    const formattedText = inputText;
     setCodeOutput(formattedText); // Mettre à jour la zone de code avec le texte formaté
   };
 
@@ -121,65 +137,62 @@ function MyComponentPage() {
         </div>
 
         <header className="header navbar-area">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <nav className="navbar navbar-expand-lg">
-                <a className="navbar-brand" href="index.html">
-                  <img src={`${process.env.PUBLIC_URL}/assets/img/logo.svg`} alt="Logo" />
+  <div className="container">
+    <div className="row">
+      <div className="col-lg-12">
+        <nav className="navbar navbar-expand-lg">
+          <a className="navbar-brand" href="index.html">
+            <img src={`${process.env.PUBLIC_URL}/assets/img/logo.svg`} alt="Logo" />
+          </a>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="toggler-icon"></span>
+            <span className="toggler-icon"></span>
+            <span className="toggler-icon"></span>
+          </button>
+
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <button type="button" className="btn btn-light">Credit Balance: ${creditBalance}</button>
+              </li>
+              <li className="nav-item">
+                <a className="page-scroll active" href="#docs"> 
+                  <button type="button" className="btn btn-light"> Docs <i className="bi bi-box-arrow-in-right"></i></button>
                 </a>
-                <button
-                  className="navbar-toggler"
-                  type="button"
-                  data-toggle="collapse"
-                  data-target="#navbarSupportedContent"
-                  aria-controls="navbarSupportedContent"
-                  aria-expanded="false"
-                  aria-label="Toggle navigation"
-                >
-                  <span className="toggler-icon"></span>
-                  <span className="toggler-icon"></span>
-                  <span className="toggler-icon"></span>
-                </button>
+              </li>
+              <li className="nav-item">
+                <a className="page-scroll" href="#wallet">
+                  <React.StrictMode>
+                    <WagmiProvider config={config}>
+                      <QueryClientProvider client={queryClient}>
+                        <RainbowKitProvider>
+                          <Appwal />
+                        </RainbowKitProvider>
+                      </QueryClientProvider>
+                    </WagmiProvider>
+                  </React.StrictMode>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
 
-                <div className="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
-                  <ul id="nav" className="navbar-nav ml-auto">
-                    
-                  <li className="nav-item">
-                    <a className="page-scroll active" href="">
-                    <button type="button" class="btn btn-light">Credit Balance: ${creditBalance}</button>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="page-scroll active" href="#docs"> 
-                      <button type="button" class="btn btn-light"> Docs <i className="bi bi-box-arrow-in-right"></i></button>
-                    </a>
-                  </li>
-                  
-                    {/* <li className="nav-item">
-                      <a className="page-scroll" href="#blockchain">Select Blockchain</a>
-                      
-                    </li> */}
-
-                    <li className="nav-item">
-                      <a className="page-scroll" href="#wallet">
-                        <Wallet /> {/* Ou utilisez simplement "Connect Wallet" si Wallet est un bouton */}
-                      </a>
-                    </li>
-                  </ul>
-                </div> {/* navbar collapse */}
-              </nav> {/* navbar */}
-            </div>
-          </div> {/* row */}
-        </div> {/* container */}
-      </header>
       {/* ========================= header end ========================= */}
 
 
-
-
      
-    
 
       {/* ========================= hero-section start ========================= */}
       <section id="home" className="hero-section">
@@ -193,11 +206,21 @@ function MyComponentPage() {
           <div className="row align-items-center">
             
           <div className="container">
-          <h3 style={{ color: 'white' }}>Crypto</h3>
+
+
+              <div className="d-flex  justify-content-center align-items-center">
+                <h3 style={{ color: 'white' }}>Crypto</h3>
+                <TooltipIcon />
+                
+              </div>
+
+              
+              
+          
                   <div className="row mt-2">
 
                   
-
+   
                     {/* Input Section */}
 
                       <div className="col-lg-6">
@@ -244,7 +267,7 @@ function MyComponentPage() {
                       }} 
                       onClick={handleProcessText}
                     >
-                      Process Text
+                      Get Flattened Code | $2
                     </button>
 
 
@@ -333,8 +356,9 @@ function MyComponentPage() {
         <script src="./assets/js/contact-form.js"></script>
         <script src="./assets/js/wow.min.js"></script>
         <script src="./assets/js/main.js"></script>
-
-        
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+            
       </div>
     </div>
   );
