@@ -6,6 +6,7 @@ import {
   optimism,
   polygon,
   sepolia,
+  telos,
 } from 'wagmi/chains';
 
 export const config = getDefaultConfig({
@@ -17,6 +18,9 @@ export const config = getDefaultConfig({
     optimism,
     arbitrum,
     base,
+    telos,
     ...(process.env.REACT_APP_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
   ],
 });
+
+console.log('Configuration:', config);

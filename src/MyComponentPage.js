@@ -11,6 +11,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Pour activer les tooltips
 import TooltipIcon from './Info';
 import '@rainbow-me/rainbowkit/styles.css';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import CryptoList from './SelectCryto.js';
+import ConnectWallet from './connectWallet.js';
 import './index.css';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -18,20 +21,19 @@ import { WagmiProvider } from 'wagmi';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { config } from './cnx/src/wagmi.ts';
 import './App.css';
-// import {
-//   apiProvider,
-//   configureChains,
-//   getDefaultWallets,
-//   RainbowKitProvider,
-//   ConnectButton
-// } from '@rainbow-me/rainbowkit';
-// import { chain, createClient, WagmiProvider } from 'wagmi';
-// import '@rainbow-me/rainbowkit/styles.css';
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
+} from '@chakra-ui/react';
+import { HamburgerIcon, AddIcon, ExternalLinkIcon, RepeatIcon, EditIcon } from '@chakra-ui/icons';
+import { ChakraProvider } from '@chakra-ui/react'; // Importez ChakraProvide
+import { InfoIcon, PhoneIcon, AtSignIcon } from '@chakra-ui/icons'; // Import des icônes supplémentaires
+
 
 const queryClient = new QueryClient();
-
-  
-
 
 
 function MyComponentPage() {
@@ -41,7 +43,7 @@ function MyComponentPage() {
   const [labelActive, setLabelActive] = useState(false);
   const [showConnectButton, setShowConnectButton] = useState(false); // State to handle Connect Wallet visibility
   const [creditBalance, setCreditBalance] = useState(100);
-  
+  const [menuOpen, setMenuOpen] = useState(false);
   
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -59,6 +61,10 @@ function MyComponentPage() {
     });
     // Apply the custom theme
     monaco.editor.setTheme('customNight');
+  };
+
+  const handleMenuToggle = () => {
+    setMenuOpen(!menuOpen);
   };
 
   
@@ -137,57 +143,107 @@ function MyComponentPage() {
         </div>
 
         <header className="header navbar-area">
-  <div className="container">
-    <div className="row">
-      <div className="col-lg-12">
-        <nav className="navbar navbar-expand-lg">
-          <a className="navbar-brand" href="index.html">
-            <img src={`${process.env.PUBLIC_URL}/assets/img/logo.svg`} alt="Logo" />
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="toggler-icon"></span>
-            <span className="toggler-icon"></span>
-            <span className="toggler-icon"></span>
-          </button>
+        <div className="container">
+        <div className="row">
+          <div className="col-lg-12">
+            <nav className="navbar navbar-expand-lg">
+              <a className="navbar-brand" href="index.html">
+                <img src={`${process.env.PUBLIC_URL}/assets/img/logo.svg`} alt="Logo" />
+              </a>
+              <button
+                className="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span className="toggler-icon"></span>
+                <span className="toggler-icon"></span>
+                <span className="toggler-icon"></span>
+              </button>
 
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <button type="button" className="btn btn-light">Credit Balance: ${creditBalance}</button>
-              </li>
-              <li className="nav-item">
-                <a className="page-scroll active" href="#docs"> 
-                  <button type="button" className="btn btn-light"> Docs <i className="bi bi-box-arrow-in-right"></i></button>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="page-scroll" href="#wallet">
-                  <React.StrictMode>
-                    <WagmiProvider config={config}>
-                      <QueryClientProvider client={queryClient}>
-                        <RainbowKitProvider>
-                          <Appwal />
-                        </RainbowKitProvider>
-                      </QueryClientProvider>
-                    </WagmiProvider>
-                  </React.StrictMode>
-                </a>
-              </li>
-            </ul>
+              <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul className="navbar-nav ml-auto" style={{ display: 'flex', gap: '0', paddingLeft: '0' }}>
+                  <li className="nav-item" style={{ margin: '0' }}>
+                    <button type="button" className="btn btn-light" style={{ margin: '0' }}>Credit Balance: ${creditBalance}</button>
+                  </li>
+                  <li className="nav-item" style={{ margin: '0' }}>
+                    <a className="page-scroll active" href="#docs"> 
+                      <button type="button" className="btn btn-light" > Docs <i className="bi bi-box-arrow-in-right"></i></button>
+                    </a>
+                  </li>
+                  <li className="nav-item" style={{ margin: '0px' ,marginRight: '3px'}}>
+                    <a className="page-scroll active" href="#list-crytpo"> 
+                     <CryptoList/>
+                    </a>
+                  </li>
+                  <li className="nav-item" style={{ margin: '0px' ,marginRight: '3px'}}>
+                    <a className="page-scroll active" href="#list-crytpo"> 
+                     <ConnectWallet/>
+                    </a>
+                  </li>
+
+                  {/* <li className="nav-item" style={{ margin: '0' }}>
+                    <a className="page-scroll" href="#wallet">
+                      <React.StrictMode>
+                        <WagmiProvider config={config}>
+                          <QueryClientProvider client={queryClient}>
+                            <RainbowKitProvider>
+                              <Appwal />
+                            </RainbowKitProvider>
+                          </QueryClientProvider>
+                        </WagmiProvider>
+                      </React.StrictMode>
+                    </a>
+                  </li> */}
+
+                  <li className="nav-item" style={{ margin: '0px' }}>
+                    <a className="page-scroll active" href="#more"> 
+                      <ChakraProvider> {/* Enveloppez votre application ici */}
+                        <Menu>
+                        <MenuButton
+                          as={IconButton}
+                          aria-label='Options'
+                          icon={<HamburgerIcon />}
+                          variant='outline'
+                          bg='white'  // Couleur de fond blanche
+                          color='black' // Couleur du texte noire (facultatif pour contraste)
+                          _hover={{ bg: 'gray.200' }} // Couleur de fond lors du hover
+                          _active={{ bg: 'gray.300' }} // Couleur de fond lorsque le bouton est activé
+                         />
+                            <MenuList>
+                              {/* Menu item pour "How to Use" */}
+                              <MenuItem color="black">
+                                How to Use
+                                <InfoIcon style={{ marginLeft: '70px' }}/> {/* Ajout de l'icône après le texte */}
+                              </MenuItem>
+
+                              {/* Menu item pour "Pricing Options" */}
+                              <MenuItem color="black">
+                                Pricing Options
+                                <ExternalLinkIcon style={{ marginLeft: '40px' }} /> {/* Ajout de l'icône après le texte */}
+                              </MenuItem>
+
+                              {/* Menu item pour "Contact Us" */}
+                              <MenuItem color="black">
+                                Contact Us
+                                <PhoneIcon style={{ marginLeft: '70px' }} /> {/* Ajout de l'icône après le texte */}
+                              </MenuItem>
+                            </MenuList>
+
+                        </Menu>
+                      </ChakraProvider>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </nav>
           </div>
-        </nav>
-      </div>
-    </div>
-  </div>
-</header>
+          </div>
+        </div>
+      </header>
 
       {/* ========================= header end ========================= */}
 
@@ -206,45 +262,43 @@ function MyComponentPage() {
           <div className="row align-items-center">
             
           <div className="container">
-
-
               <div className="d-flex  justify-content-center align-items-center">
                 <h3 style={{ color: 'white' }}>Crypto</h3>
                 <TooltipIcon />
                 
-              </div>
-
-              
-              
-          
+              </div>      
                   <div className="row mt-2">
-
-                  
-   
                     {/* Input Section */}
 
                       <div className="col-lg-6">
                         <div className="form-floating mb-3">
                         <div className="input-group">
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="floatingInput"
-                              value={inputText}
-                              onChange={(e) => setInputText(e.target.value)}
-                              onFocus={() => setLabelActive(true)} // Activer le label au focus
-                              onBlur={() => setLabelActive(inputText !== '')} // Garder le label actif si le champ n'est pas vide
-                              style={{ backgroundColor: 'rgb(20, 21, 21)', color: '#34C759' }}
-                            />
-                            <button className="btn btn-outline-secondary" 
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="floatingInput"
+                            placeholder="Enter your smart contract address"
+                            value={inputText}
+                            onChange={(e) => setInputText(e.target.value)}
+                            onFocus={() => setLabelActive(true)} // Activer le label au focus
+                            onBlur={() => setLabelActive(inputText !== '')} // Garder le label actif si le champ n'est pas vide
+                            style={{ backgroundColor: 'rgb(20, 21, 21)', color: '#34C759', fontSize: '14px' }} // Ajuster la taille de la police globale
+                          />
+                          <style jsx>{`
+                            #floatingInput::placeholder {
+                              font-size: 12px; /* Taille spécifique du placeholder */
+                               color: #34C759;
+                            }
+                          `}</style>
+                          <button className="btn btn-outline-secondary" 
                             onClick={pasteFromClipboard} 
                             type="button"
                             title="Paste from clipboard">
-                            <i class="bi bi-file-diff-fill"></i>
-                            </button>
-
+                            <i className="bi bi-file-diff-fill"></i>
+                          </button>
                         </div>
-                        <label 
+
+                        {/* <label 
                           htmlFor="floatingInput" 
                           className="custom-label"
                           style={{ 
@@ -255,7 +309,7 @@ function MyComponentPage() {
                           }}
                         >
                           Enter your smart contract address
-                        </label>
+                        </label> */}
                       </div>
                       <button 
                       className="btn btn-outline-secondary mb-3" 
@@ -268,13 +322,9 @@ function MyComponentPage() {
                       onClick={handleProcessText}
                     >
                       Get Flattened Code | $2
-                    </button>
-
-
-                      
+                    </button>        
                       <Main/>
                     </div>
-
                     {/* Output Section - Styled as Code Editor */}
                     <div className="col-lg-6">
                       <div className="editor-container">
@@ -318,8 +368,6 @@ function MyComponentPage() {
                           Revert
                         </button>
                       </div>
-
-
                         {/* Boîte d'instructions semi-transparente */}
                         <div
                           style={{
@@ -341,23 +389,20 @@ function MyComponentPage() {
                             <li style={{ marginLeft: '10px' }}>Step 4: You can revert the changes using the "Revert" button.</li>
                           </ol>
                         </div>
-                </div>
-                      
+                      </div>       
                   </div>
-                </div>
-            
+                </div> 
+            </div>
           </div>
-        </div>
       </section>
-
 
         {/* JS scripts */}
         <script src="./assets/js/bootstrap.bundle-5.0.0.alpha-1-min.js"></script>
         <script src="./assets/js/contact-form.js"></script>
         <script src="./assets/js/wow.min.js"></script>
         <script src="./assets/js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
             
       </div>
     </div>
