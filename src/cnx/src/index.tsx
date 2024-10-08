@@ -11,6 +11,8 @@ import App from './App';
 import { config } from './wagmi';
 import { CustomAvatar } from './App'; // Importe le composant Avatar personnalisé
 
+console.log('Configuration:', config);
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

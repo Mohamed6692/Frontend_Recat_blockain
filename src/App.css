@@ -71,14 +71,24 @@
 
 .navbar-nav {
   display: flex;
-  gap: 10px; /* Espacement entre les éléments du menu */
+  gap: 0px; /* Espacement entre les éléments du menu */
   align-items: center; /* Alignement vertical des items */
 }
 
 .nav-item {
-  margin-right: 10px; /* Espacement entre les éléments du `navbar` */
+  margin-right:0px; /* Espacement entre les éléments du `navbar` */
+}
+
+.nav-ite {
+  margin-right:0px; /* Espacement entre les éléments du `navbar` */
 }
 
 .btn {
   padding: 0.375rem 0.75rem; /* Ajustez la taille des boutons pour qu'ils soient uniformes */
+}
+
+
+input::placeholder {
+  color: #34C759; /* Met la couleur du placeholder en vert */
+  opacity: 1; /* Assure que la couleur s'applique correctement sur tous les navigateurs */
 }
