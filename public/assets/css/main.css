@@ -1407,7 +1407,7 @@ p {
     03.Hero-section CSS
 ===========================*/
 .hero-section {
-  background-image: linear-gradient(#1a1f31 0%, #0c0c0d 4.66%, #1a1c28 76.69%, #1029a6 100%);
+  background-image: linear-gradient(#1a1f31 0%, #0c0c0d 4.66%, #1a1c28 76.69%, #0d0d13 100%);
   padding-top: 100px;
   padding-bottom: 80px;
   position: relative;
