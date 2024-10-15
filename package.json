@@ -48,7 +48,8 @@
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@rainbow-me)/\"",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "npm install --legacy-peer-deps"
   },
   "eslintConfig": {
     "extends": [
