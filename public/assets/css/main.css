@@ -1131,7 +1131,7 @@ p {
   width: 100%;
   z-index: 99;
   transition: all 0.3s ease-out 0s;
-  background: rgba(28, 35, 58, 0.9);
+  background: rgb(7 8 11 / 90%);
 }
 
 .sticky {
