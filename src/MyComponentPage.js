@@ -21,13 +21,17 @@ import { WagmiProvider } from 'wagmi';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { config } from './cnx/src/wagmi.ts';
 import './App.css';
+import { Button, ButtonGroup } from '@chakra-ui/react'
 import {
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
   IconButton,
+  useToast
 } from '@chakra-ui/react';
+import {  Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure } from '@chakra-ui/react';
+
 import { HamburgerIcon, AddIcon, ExternalLinkIcon, RepeatIcon, EditIcon } from '@chakra-ui/icons';
 import { ChakraProvider } from '@chakra-ui/react'; // Importez ChakraProvide
 import { InfoIcon, PhoneIcon, AtSignIcon } from '@chakra-ui/icons'; // Import des icônes supplémentaires
@@ -38,13 +42,61 @@ const queryClient = new QueryClient();
 
 function MyComponentPage() {
 
+
+  const styles = {
+    container: {
+      margin: 0,
+      padding: 0,
+      boxSizing: 'border-box',
+    },
+    body: {
+      justifyContent: 'center',
+      marginTop:'37px',
+      alignItems: 'center',
+      height: '100%', // Use vh for compatibility
+    },
+    appContainer: {
+      width: '100%',
+      height: '474px',
+      maxWidth: '390px',
+      marginTop:'45px',
+      borderRadius: '6px',
+      overflow: 'hidden',
+      border: '1px solid #e4e4e7',
+    },
+    title: {
+      textAlign: 'center', // Align title to the left
+      margin: '16px 0',  // Add some space around the title
+      color: 'white', // Title color in white
+    },
+    '@media (max-width: 768px)': {
+      appContainer: {
+        height: '100%',
+        maxWidth: 'unset',
+        borderRadius: '0',
+        border: '0',
+      },
+    },
+  };
+  
+
+
   const [inputText, setInputText] = useState('');
   const [codeOutput, setCodeOutput] = useState('');
   const [labelActive, setLabelActive] = useState(false);
   const [showConnectButton, setShowConnectButton] = useState(false); // State to handle Connect Wallet visibility
   const [creditBalance, setCreditBalance] = useState(100);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [menuOpen, setMenuOpen] = useState(false);
-  
+  const [credits, setCredits] = useState(0);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const toast = useToast();
+  const handleSetCredits = (newCredits) => {
+    setCredits(newCredits);
+    setIsAuthenticated(true);
+  };
+
 
   const handleEditorDidMount = (editor, monaco) => {
     // Define and apply the custom theme once Monaco is available
@@ -69,9 +121,26 @@ function MyComponentPage() {
 
   
   const handleProcessText = () => {
-    const formattedText = inputText;
-    setCodeOutput(formattedText); // Mettre à jour la zone de code avec le texte formaté
+    if (credits < 2) {
+      console.log(credits);
+      // Afficher un toast d'erreur si les crédits sont insuffisants
+      toast({
+        title: 'Erreur',
+        description: 'Not enough credits to perform the action, please purchase credits to continue.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+    } else {
+      // Logique de traitement ici
+      console.log("Traitement en cours...");
+      const formattedText = inputText; // Récupérer le texte d'entrée
+      setCodeOutput(formattedText); // Mettre à jour la zone de code avec le texte formaté
+      setCredits(credits - 2); // Déduire les crédits
+    }
   };
+  
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(codeOutput);
@@ -103,8 +172,27 @@ function MyComponentPage() {
     }
   };
 
+  useEffect(() => {
+    // Fonction pour gérer la redimension de la fenêtre
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initialiser l'état au montage
+    handleResize();
+
+    // Ajouter un écouteur de redimensionnement
+    window.addEventListener('resize', handleResize);
+
+    // Nettoyage lors du démontage du composant
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+
   return (
-    <div>
+    <>
       <meta charSet="utf-8" />
       <meta httpEquiv="x-ua-compatible" content="ie=edge" />
       <title>Crypto - ICO Crypto, Blockchain & Cryptocurrency Web Template</title>
@@ -118,7 +206,7 @@ function MyComponentPage() {
       <link rel="stylesheet" href="./assets/css/main.css" />
      
 
-      <div>
+      
         {/* Internet Explorer upgrade warning */}
         {/*[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
@@ -166,25 +254,53 @@ function MyComponentPage() {
 
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav ml-auto" style={{ display: 'flex', gap: '0', paddingLeft: '0' }}>
-                  <li className="nav-item" style={{ margin: '0' }}>
-                    <button type="button" className="btn btn-light" style={{ margin: '0' }}>Credit Balance: ${creditBalance}</button>
-                  </li>
-                  <li className="nav-item" style={{ margin: '0' }}>
+              
+                  <li className="nav-item" style={{ margin: '0'}}>
                     <a className="page-scroll active" href="#docs"> 
-                      <button type="button" className="btn btn-light" > Docs <i className="bi bi-box-arrow-in-right"></i></button>
+                      <ChakraProvider>
+                          <Button 
+                            bg='white' 
+                            color='black' 
+                            borderColor='black' 
+                            variant='solid' 
+                             mr='5px'
+                            _hover={{ bg: 'gray.200' }}
+                          >
+                            Docs <i className="bi bi-box-arrow-in-right"></i>
+                          </Button>
+                      </ChakraProvider> 
                     </a>
                   </li>
+
                   <li className="nav-item" style={{ margin: '0px' ,marginRight: '3px'}}>
                     <a className="page-scroll active" href="#list-crytpo"> 
                      <CryptoList/>
                     </a>
                   </li>
+                  {isAuthenticated && (
+                      <li className="nav-item" style={{ margin: '0' }}>
+                        <ChakraProvider>
+                          <Button 
+                            bg='white' 
+                            color='black' 
+                            borderColor='black' 
+                            variant='solid' 
+                             mr='5px'
+                            _hover={{ bg: 'gray.200' }}
+                          >
+                            Credit Balance: ${credits}
+                          </Button>
+                       </ChakraProvider> 
+                      </li>
+                  )}
                   <li className="nav-item" style={{ margin: '0px' ,marginRight: '3px'}}>
-                    <a className="page-scroll active" href="#list-crytpo"> 
-                     <ConnectWallet/>
+                    <a className="page-scroll active" href="#list-crytpo">
+                    <ConnectWallet setCredits={handleSetCredits} setIsAuthenticated={setIsAuthenticated}/>
                     </a>
                   </li>
-
+                  
+                  
+                    
                   {/* <li className="nav-item" style={{ margin: '0' }}>
                     <a className="page-scroll" href="#wallet">
                       <React.StrictMode>
@@ -243,7 +359,7 @@ function MyComponentPage() {
           </div>
           </div>
         </div>
-      </header>
+        </header>
 
       {/* ========================= header end ========================= */}
 
@@ -251,66 +367,156 @@ function MyComponentPage() {
      
 
       {/* ========================= hero-section start ========================= */}
-      <section id="home" className="hero-section">
-        <div className="shapes">
-          <div className="shape shape-1"></div>
-          <div className="shape shape-2"></div>
-          <div className="shape shape-3"></div>
-        </div>
-        
-        <div className="container">
-          <div className="row align-items-center">
-            
+        <section id="home" className="hero-section">
+          <div className="shapes">
+            <div className="shape shape-1"></div>
+            <div className="shape shape-2"></div>
+            <div className="shape shape-3"></div>
+          </div>
+
           <div className="container">
-              <div className="d-flex  justify-content-center align-items-center">
-                <h3 style={{ color: 'white' }}>Crypto</h3>
-                <TooltipIcon />
+            <div className="row align-items-center">
+              
+              <div className="col-12">
+                <div className="pix d-flex justify-content-center align-items-center flex-column flex-md-row">
+                  <h3 style={{ color: 'white' }}>Crypto</h3>
+                  <TooltipIcon />
+                </div>      
                 
-              </div>      
-                  <div className="row mt-2">
-                    {/* Input Section */}
 
-                      <div className="col-lg-6">
-                        <div className="form-floating mb-3">
-                        <div className="input-group">
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="floatingInput"
-                            placeholder="Enter your smart contract address"
-                            value={inputText}
-                            onChange={(e) => setInputText(e.target.value)}
-                            onFocus={() => setLabelActive(true)} // Activer le label au focus
-                            onBlur={() => setLabelActive(inputText !== '')} // Garder le label actif si le champ n'est pas vide
-                            style={{ backgroundColor: 'rgb(20, 21, 21)', color: '#34C759', fontSize: '14px' }} // Ajuster la taille de la police globale
-                          />
-                          <style jsx>{`
-                            #floatingInput::placeholder {
-                              font-size: 12px; /* Taille spécifique du placeholder */
-                               color: #34C759;
-                            }
-                          `}</style>
-                          <button className="btn btn-outline-secondary" 
-                            onClick={pasteFromClipboard} 
-                            type="button"
-                            title="Paste from clipboard">
-                            <i className="bi bi-file-diff-fill"></i>
-                          </button>
-                        </div>
 
-                        {/* <label 
-                          htmlFor="floatingInput" 
-                          className="custom-label"
-                          style={{ 
-                            color: '#34C759', 
-                            display: labelActive || inputText ? 'none' : 'block', // Disparaître si le label est actif ou s'il y a du texte
-                            fontSize: '0.8rem', // Ajustez cette valeur pour réduire la taille du texte
-                            marginBottom: '0.7rem'
-                          }}
-                        >
-                          Enter your smart contract address
-                        </label> */}
+                {isMobile ? (
+                // Display for Mobile orr
+                <div className="row mt-2">
+                  {/* Input Section */}
+                  <div className="col-lg-6 mb-4">
+                    <div className="form-floating mb-3">
+                      <div className="input-group">
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="floatingInput"
+                          placeholder="Enter your smart contract address"
+                          value={inputText}
+                          onChange={(e) => setInputText(e.target.value)}
+                          onFocus={() => setLabelActive(true)}
+                          onBlur={() => setLabelActive(inputText !== '')}
+                          style={{ backgroundColor: 'rgb(20, 21, 21)', color: '#34C759', fontSize: '14px' }}
+                        />
+                        <style jsx>{`
+                          #floatingInput::placeholder {
+                            font-size: 12px;
+                            color: #34C759;
+                          }
+                        `}</style>
+                        <button className="btn btn-outline-secondary" onClick={pasteFromClipboard} type="button" title="Paste from clipboard">
+                          <i className="bi bi-file-diff-fill"></i>
+                        </button>
                       </div>
+                    </div>
+                    {isAuthenticated ? (
+                        <button
+                          className="btn btn-outline-secondary mb-3 w-100"
+                          style={{ backgroundColor: 'black', color: '#34C759', borderColor: '#34C759' }}
+                          onClick={handleProcessText}
+                        >
+                          Get Flattened Code | $2
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-outline-secondary mb-3 w-100"
+                          style={{ backgroundColor: 'grey', color: 'white', borderColor: 'grey' }}
+                          disabled
+                        >
+                          Connect Wallet to use
+                        </button>
+                      )}
+                    <div className="tablette">
+                      <div className="editor-container">
+                        <Editor
+                          height="390px"
+                          width="100%"
+                          defaultLanguage="javascript"
+                          value={codeOutput}
+                          theme="customNight"
+                          onMount={handleEditorDidMount}
+                          options={{
+                            readOnly: true,
+                            lineNumbers: 'on',
+                          }}
+                        />
+                      </div>
+
+                      <div className="d-flex flex-column flex-md-row justify-content-start mt-2">
+                        <button className="btn btn-outline-secondary me-md-2 mb-2 mb-md-0 w-100" style={{ backgroundColor: 'black', color: '#34C759', borderColor: '#34C759' }} onClick={copyToClipboard}>
+                          Copy Code
+                        </button>
+                        <button className="btn btn-outline-secondary w-100" style={{ backgroundColor: 'black', color: '#34C759', borderColor: '#34C759' }} onClick={handleRevert}>
+                          Revert
+                        </button>
+                      </div>
+
+                      <div style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', padding: '20px', borderRadius: '8px', color: 'white', marginBottom: '20px', marginTop: '20px', lineHeight: '1.5', textAlign: 'left' }}>
+                        <h4 style={{ marginLeft: '10px' }}>Instructions for SimplePay</h4>
+                        <ol>
+                          <li style={{ marginLeft: '10px' }}>Step 1: Enter the required code in the input field.</li>
+                          <li style={{ marginLeft: '10px' }}>Step 2: Click the "Process Text" button to process your input.</li>
+                          <li style={{ marginLeft: '10px' }}>Step 3: Use the "Copy Code" button to copy the output code.</li>
+                          <li style={{ marginLeft: '10px' }}>Step 4: You can revert the changes using the "Revert" button.</li>
+                        </ol>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Output Section */}
+                  <div className="col-lg-6">
+                  {isAuthenticated ? (
+                    <Main />
+                  ) : (
+                    <div style={styles.appContainer}>
+                      <div style={{ padding: '20px', backgroundColor: '#333', color: '#fff' }}>
+                        <h3 style={styles.title}> SymplePay </h3>
+                        
+                      </div>
+                      <div style={styles.body}>
+                        Log in to access SymplePay processing</div>
+                    </div>
+                  )}
+                  </div>
+                </div>
+                 ) : (
+                <div className="row mt-2">
+                  {/* Input Section */}
+                  <div className="col-lg-6 mb-4">
+                    <div className="form-floating mb-3">
+                      <div className="input-group">
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="floatingInput"
+                          placeholder="Enter your smart contract address"
+                          value={inputText}
+                          onChange={(e) => setInputText(e.target.value)}
+                          onFocus={() => setLabelActive(true)} // Activer le label au focus
+                          onBlur={() => setLabelActive(inputText !== '')} // Garder le label actif si le champ n'est pas vide
+                          style={{ backgroundColor: 'rgb(20, 21, 21)', color: '#34C759', fontSize: '14px' }} // Ajuster la taille de la police globale
+                        />
+                        <style jsx>{`
+                          #floatingInput::placeholder {
+                            font-size: 12px; /* Taille spécifique du placeholder */
+                            color: #34C759;
+                          }
+                        `}</style>
+                        <button className="btn btn-outline-secondary" 
+                          onClick={pasteFromClipboard} 
+                          type="button"
+                          title="Paste from clipboard">
+                          <i className="bi bi-file-diff-fill"></i>
+                        </button>
+                      </div>
+                    </div>
+                    {isAuthenticated ? (
+                      <>
                       <button 
                       className="btn btn-outline-secondary mb-3" 
                       style={{ 
@@ -322,79 +528,112 @@ function MyComponentPage() {
                       onClick={handleProcessText}
                     >
                       Get Flattened Code | $2
-                    </button>        
-                      <Main/>
-                    </div>
-                    {/* Output Section - Styled as Code Editor */}
-                    <div className="col-lg-6">
-                      <div className="editor-container">
-                          <Editor
-                          height="390px"
-                          width="100%"
-                          defaultLanguage="javascript"
-                          value={codeOutput}
-                          theme="customNight"
-                          onMount={handleEditorDidMount} // Ensure Monaco is ready before applying the theme
-                          options={{
-                            readOnly: true,
-                            lineNumbers: 'on',
-                          }}
-                        />
-                    </div>
-                      {/* Boutons */}
-                      <div className="d-flex justify-content-start mt-2">
-                        <button 
-                          className="btn btn-outline-secondary me-2" 
-                          style={{ 
-                            backgroundColor: 'black', // Couleur de fond noire
-                            color: '#34C759', // Couleur du texte verte
-                            borderColor: '#34C759', // Couleur de la bordure pour correspondre au texte
-                            width: '350px',
-                          }} 
-                          onClick={copyToClipboard}
-                        >
-                          Copy Code
-                        </button>
-                        <button 
-                          className="btn btn-outline-secondary" 
-                          style={{ 
-                            backgroundColor: 'black', // Couleur de fond noire
-                            color: '#34C759', // Couleur du texte verte
-                            borderColor: '#34C759', // Couleur de la bordure pour correspondre au texte
-                            width: '350px',
-                          }} 
-                          onClick={handleRevert}
-                        >
-                          Revert
-                        </button>
+                    </button> 
+                    <div className='tablette'>
+                    <Main />
+                    </div> 
+                    </>
+                    
+                    ) : (
+                      <>
+                      <button
+                        className="btn btn-outline-secondary mb-3 "
+                        style={{ width: '300px', backgroundColor: 'grey', color: 'white', borderColor: 'grey' }}
+                        disabled
+                      >
+                        Connect Wallet to use
+                      </button>
+
+                      <div style={styles.appContainer}>
+                      <div style={{ padding: '20px', backgroundColor: '#333', color: '#fff' }}>
+                        <h3 style={styles.title}> SymplePay </h3>
+                        
                       </div>
-                        {/* Boîte d'instructions semi-transparente */}
-                        <div
-                          style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent
-                            padding: '20px',
-                            borderRadius: '8px',
-                            color: 'white',
-                            marginBottom: '20px',
-                            marginTop: '20px',
-                            lineHeight: '1.5', // Hauteur des lignes
-                            textAlign: 'left',
-                          }}
-                        >
-                         <h4 style={{ marginLeft: '10px' }}>Instructions for SimplePay</h4>
-                          <ol> {/* Align text properly */}
-                            <li style={{ marginLeft: '10px' }}>Step 1: Enter the required code in the input field.</li>
-                            <li style={{ marginLeft: '10px' }}>Step 2: Click the "Process Text" button to process your input.</li>
-                            <li style={{ marginLeft: '10px' }}>Step 3: Use the "Copy Code" button to copy the output code.</li>
-                            <li style={{ marginLeft: '10px' }}>Step 4: You can revert the changes using the "Revert" button.</li>
-                          </ol>
-                        </div>
-                      </div>       
+                      <div style={styles.body}>
+                        Log in to access SymplePay processing</div>
+                    </div>
+                      </>
+                      
+                    )}
+                    {/* <div className='tablette'>
+                    <Main />
+                    </div>        */}
+                    
                   </div>
-                </div> 
+
+                  {/* Output Section - Styled as Code Editor */}
+                  <div className="col-lg-6">
+                    <div className="editor-container">
+                      <Editor
+                        height="390px"
+                        width="100%"
+                        defaultLanguage="javascript"
+                        value={codeOutput}
+                        theme="customNight"
+                        onMount={handleEditorDidMount}
+                        options={{
+                          readOnly: true,
+                          lineNumbers: 'on',
+                        }}
+                      />
+                    </div>
+
+                    {/* Boutons */}
+                    <div className="d-flex flex-column flex-md-row justify-content-start mt-2">
+                      <button 
+                        className="btn btn-outline-secondary me-md-2 mb-2 mb-md-0 w-100" 
+                        style={{ 
+                          backgroundColor: 'black', 
+                          color: '#34C759', 
+                          borderColor: '#34C759',
+                        }} 
+                        onClick={copyToClipboard}
+                      >
+                        Copy Code
+                      </button>
+                      <button 
+                        className="btn btn-outline-secondary w-100" 
+                        style={{ 
+                          backgroundColor: 'black', 
+                          color: '#34C759', 
+                          borderColor: '#34C759',
+                        }} 
+                        onClick={handleRevert}
+                      >
+                        Revert
+                      </button>
+                    </div>
+
+                    {/* Instructions Box */}
+                    <div
+                      style={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+                        padding: '20px',
+                        borderRadius: '8px',
+                        color: 'white',
+                        marginBottom: '20px',
+                        marginTop: '20px',
+                        lineHeight: '1.5', 
+                        textAlign: 'left',
+                      }}
+                    >
+                      <h4 style={{ marginLeft: '10px' }}>Instructions for SimplePay</h4>
+                      <ol>
+                        <li style={{ marginLeft: '10px' }}>Step 1: Enter the required code in the input field.</li>
+                        <li style={{ marginLeft: '10px' }}>Step 2: Click the "Process Text" button to process your input.</li>
+                        <li style={{ marginLeft: '10px' }}>Step 3: Use the "Copy Code" button to copy the output code.</li>
+                        <li style={{ marginLeft: '10px' }}>Step 4: You can revert the changes using the "Revert" button.</li>
+                      </ol>
+                    </div>
+                  </div>       
+                </div>
+                )}
+
+              </div>
             </div>
           </div>
-      </section>
+        </section>
+
 
         {/* JS scripts */}
         <script src="./assets/js/bootstrap.bundle-5.0.0.alpha-1-min.js"></script>
@@ -403,9 +642,8 @@ function MyComponentPage() {
         <script src="./assets/js/main.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-            
-      </div>
-    </div>
+      
+    </>
   );
 }
 

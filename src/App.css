@@ -1,6 +1,13 @@
 .App {
   text-align: center;
+  height: 100%;
 }
+
+#root{
+  height: 100%;
+}
+
+
 
 .App-logo {
   height: 40vmin;
@@ -91,4 +98,16 @@
 input::placeholder {
   color: #34C759; /* Met la couleur du placeholder en vert */
   opacity: 1; /* Assure que la couleur s'applique correctement sur tous les navigateurs */
+}
+
+
+
+
+
+/* Pour les téléphones */
+@media only screen and (max-width: 600px) {
+  .button-margin {
+    margin-bottom: 15px; /* Ajustement spécifique pour mobile */
+  }
+
 }
