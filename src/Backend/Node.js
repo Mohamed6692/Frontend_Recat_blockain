@@ -5,7 +5,7 @@ const cors = require('cors');
 
 // Configuration CORS
 const corsOptions = {
-  origin: 'http://localhost:3001',
+  origin: '*', // 
   optionsSuccessStatus: 200
 };
 
