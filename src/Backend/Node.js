@@ -20,9 +20,10 @@ admin.initializeApp({
 
 // Simuler la base de données utilisateur
 let usersCredits = {
-    'wallet-0xc227c39367a3207f197ecbfd77305a25b07f71bf': 0, // credit votre portefeuille ici
+    'wallet-0x3aed31e353ac03b0a212810e17a96286c5027e9b': 0, // credit votre portefeuille ici
     'wallet-0x1234abcd': 100,  // Adresse corrigée
     'wallet-0x5678efgh': 50,
+    'wallet-0x052e149b092135a65a5A8d4befb47760b77B7960': 0,
   };
 
 // Route pour générer un token Firebase
@@ -42,7 +43,7 @@ app.post('/api/getFirebaseToken', async (req, res) => {
 // Route pour obtenir les crédits de l'utilisateur
 app.get('/api/getUserCredits', (req, res) => {
   const { walletAddress } = req.query;
-  const credits = usersCredits[`wallet-${walletAddress}`] || 0;
+  const credits = usersCredits[`wallet-${walletAddress}`] || 0 ;
   res.json({ credits });
 });
 
@@ -50,7 +51,7 @@ app.get('/api/getUserCredits', (req, res) => {
 
 // Route pour modifier les crédits d'un utilisateur existant
 app.post('/api/updateUserCredits', (req, res) => {
-   
+  console.log('Route /api/updateUserCredits called');
     const { walletAddress, newCredits } = req.body;
   
     // Valider le montant des nouveaux crédits
@@ -59,12 +60,13 @@ app.post('/api/updateUserCredits', (req, res) => {
     }
   
     const uid = `wallet-${walletAddress}`;
-    
+    console.log(uid);
     // Vérifier si l'utilisateur existe
     if (usersCredits[uid] !== undefined) {
+      console.log(usersCredits[uid]);
       usersCredits[uid] = newCredits; // Mettre à jour les crédits de l'utilisateur
       return res.json({ message: 'Credits updated successfully', credits: usersCredits[uid] });
-      console.log('enter')
+
     } else {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
