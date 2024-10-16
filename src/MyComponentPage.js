@@ -9,7 +9,6 @@ import Blockchain from './blockchain';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Pour activer les tooltips
 import TooltipIcon from './Info';
-import '@rainbow-me/rainbowkit/styles.css';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import CryptoList from './SelectCryto.js';
 import ConnectWallet from './connectWallet.js';
