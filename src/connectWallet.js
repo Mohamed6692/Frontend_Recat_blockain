@@ -78,6 +78,8 @@ const ConnectWallet = ({ setCredits, credits, setIsAuthenticated }) => {
         await fetchCredits(walletAddress);
         setIsAuthenticated(true);
       } else {
+        setWalletAddress(null);
+        setCredits(0);
         setIsAuthenticated(false);
       }
     });
@@ -137,12 +139,18 @@ const ConnectWallet = ({ setCredits, credits, setIsAuthenticated }) => {
 
 
 
-  const disconnectWallet = () => {
+const disconnectWallet = async () => {
+  try {
+    await auth.signOut(); // Déconnecter l'utilisateur de Firebase
     setWalletAddress(null);
     setCredits(0);
-    auth.signOut(); // Déconnecter l'utilisateur de Firebase
     setIsAuthenticated(false); // Mettez à jour l'état d'authentification ici
-  };
+    console.log('Déconnecté avec succès');
+  } catch (error) {
+    console.error('Erreur lors de la déconnexion:', error);
+  }
+};
+
 
   return (
     <ChakraProvider>
