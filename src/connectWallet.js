@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect,useState, useCallback} from 'react';
 import Select from 'react-select';
 import axios from 'axios';
 import { ChakraProvider, Button } from '@chakra-ui/react';
@@ -34,25 +34,8 @@ const ConnectWallet = ({ setCredits, credits, setIsAuthenticated }) => {
     }
   }; 
 
-  // Fonction d'authentification avec Firebase
-  const authenticateWithFirebase = async (walletAddress) => {
-    try {
-      await setPersistence(auth, browserLocalPersistence);
-      const response = await axios.post('http://localhost:3000/api/getFirebaseToken', { walletAddress });
-      const { token } = response.data;
-      const userCredential = await signInWithCustomToken(auth, token);
-      console.log('Authenticated user:', userCredential.user);
-
-      fetchCredits(walletAddress);
-      setIsAuthenticated(true);  // Mettez à jour l'état d'authentification ici
-    } catch (error) {
-      console.error("Erreur lors de l'authentification avec Firebase:", error);
-      setError('Authentication error. Please try again.');
-    }
-  };
-
-  // Fonction pour récupérer les crédits
-  const fetchCredits = async (walletAddress) => {
+  // Mémorisation de fetchCredits avec useCallback
+  const fetchCredits = useCallback(async (walletAddress) => {
     try {
       const response = await axios.get(`http://localhost:3000/api/getUserCredits?walletAddress=${walletAddress}`);
       const { credits } = response.data;
@@ -61,25 +44,46 @@ const ConnectWallet = ({ setCredits, credits, setIsAuthenticated }) => {
     } catch (error) {
       console.error("Erreur lors de la récupération des crédits:", error);
     }
-  };
+  }, [setCredits]); // Dépendance uniquement sur setCredits
+
+
+
+  // Fonction d'authentification avec Firebase
+  const authenticateWithFirebase = useCallback(async (walletAddress) => {
+    try {
+      await setPersistence(auth, browserLocalPersistence);
+      const response = await axios.post('http://localhost:3000/api/getFirebaseToken', { walletAddress });
+      const { token } = response.data;
+      const userCredential = await signInWithCustomToken(auth, token);
+      console.log('Authenticated user:', userCredential.user);
+
+      await fetchCredits(walletAddress);
+      setIsAuthenticated(true);  // Mettez à jour l'état d'authentification ici
+    } catch (error) {
+      console.error("Erreur lors de l'authentification avec Firebase:", error);
+      setError('Authentication error. Please try again.');
+    }
+  }, [fetchCredits, setIsAuthenticated]); // Dépendance sur fetchCredits et setIsAuthenticated
+
+
 
   // Vérifier si l'utilisateur est déjà connecté lors du chargement de la page
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const walletAddress = user.uid.replace('wallet-', '');
-            setWalletAddress(walletAddress);
-            console.log('Wallet Address:', walletAddress); 
-            setIsWalletConnected(true);
-            await fetchCredits(walletAddress); // Attendre la récupération des crédits
-            setIsAuthenticated(true);
-        } else {
-            setIsAuthenticated(false);
-        }
+      if (user) {
+        const walletAddress = user.uid.replace('wallet-', '');
+        setWalletAddress(walletAddress);
+        console.log('Wallet Address:', walletAddress); 
+        setIsWalletConnected(true);
+        await fetchCredits(walletAddress);
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
     });
 
-    return () => unsubscribe(); // Nettoyer l'abonnement
-}, [setIsAuthenticated]);
+    return () => unsubscribe(); // Nettoyage de l'abonnement
+  }, [fetchCredits, setIsAuthenticated]);
 
 
   const connectWallet = async () => {
