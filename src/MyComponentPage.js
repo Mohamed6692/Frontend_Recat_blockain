@@ -4,7 +4,7 @@ import '@simplepay-ai/widget';
 import Main from './SimplePay/Main';
 import Editor from '@monaco-editor/react';
 import './App.css';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+
 import Blockchain from './blockchain';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Pour activer les tooltips
