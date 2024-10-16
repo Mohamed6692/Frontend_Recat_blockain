@@ -1,1 +1,0 @@
-(self.webpackChunkcrypto_react=self.webpackChunkcrypto_react||[]).push([[4147],{15340:()=>{},79838:()=>{}}]);

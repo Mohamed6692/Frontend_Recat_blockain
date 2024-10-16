@@ -10,8 +10,6 @@
     "@monaco-editor/react": "^4.6.0",
     "@mui/icons-material": "^6.1.2",
     "@mui/material": "^6.1.1",
-    "@rainbow-me/rainbowkit": "^2.1.7",
-    "@rainbow-me/rainbowkit-siwe-next-auth": "^0.4.1",
     "@simplepay-ai/api-client": "^0.2.0",
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^16.0.1",
