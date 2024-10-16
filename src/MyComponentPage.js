@@ -31,6 +31,7 @@ import {  Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, Moda
 import { HamburgerIcon, AddIcon, ExternalLinkIcon, RepeatIcon, EditIcon } from '@chakra-ui/icons';
 import { ChakraProvider } from '@chakra-ui/react'; // Importez ChakraProvide
 import { InfoIcon, PhoneIcon, AtSignIcon } from '@chakra-ui/icons'; // Import des icônes supplémentaires
+import AccesLogin from './SimplePay/AccesLogin.jsx';
 
 
 const queryClient = new QueryClient();
@@ -546,15 +547,7 @@ function MyComponentPage() {
                         >
                           Connect Wallet to use
                         </button>
-                
-                        <div style={styles.appContainer}>
-                          <div style={{ padding: '1.25rem', backgroundColor: '#333', color: '#fff' }}> {/* 20px en rem */}
-                            <h3 style={styles.title}>SymplePay</h3>
-                          </div>
-                          <div style={styles.body}>
-                            Log in to access SymplePay processing
-                          </div>
-                        </div>
+                       <AccesLogin/>
                       </>
                     )}
                   </div>

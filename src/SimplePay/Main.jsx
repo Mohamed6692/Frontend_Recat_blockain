@@ -38,7 +38,6 @@ const Main = ({ walletAddress, setCredits }) => {
           },
         },
       };
-      
 
     const [isWalletConnected, setIsWalletConnected] = useState(false);
 

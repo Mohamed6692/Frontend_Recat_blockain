@@ -191,19 +191,20 @@ const disconnectWallet = async () => {
           </>
         ) : (
           <Button 
-            colorScheme='blue' 
-            onClick={connectWallet}
-            style={{ 
-              fontSize: '12px', 
-              backgroundColor: 'white',
-              color: 'black',
-              border: '1px solid black',
-              height:'43px' 
-            }}
-          >
-            Connect Wallet
-            <FaWallet style={{ marginLeft: '8px' }} />
-          </Button>
+          colorScheme='blue' 
+          onClick={connectWallet}
+          style={{ 
+            fontSize: '1rem', // Utilisation de rem pour la taille de la police
+            backgroundColor: 'white',
+            color: 'black',
+            border: '0.0625rem solid black', // Conversion de 1px en rem (1px = 0.0625rem)
+            height: '2.7rem' // Conversion de 43px en rem (43px = 2.7rem)
+          }}
+      >
+          Connect Wallet
+          <FaWallet style={{ marginLeft: '0.5rem' }} /> {/* Conversion de 8px en rem */}
+      </Button>
+      
         )}
       </div>
     </ChakraProvider>
