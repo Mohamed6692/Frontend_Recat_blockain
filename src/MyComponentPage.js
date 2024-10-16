@@ -4,7 +4,6 @@ import '@simplepay-ai/widget';
 import Main from './SimplePay/Main';
 import Editor from '@monaco-editor/react';
 import './App.css';
-import Appwal from './cnx/src/App.tsx'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Blockchain from './blockchain';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,9 +16,7 @@ import ConnectWallet from './connectWallet.js';
 import './index.css';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider } from 'wagmi';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { config } from './cnx/src/wagmi.ts';
+
 import './App.css';
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import {
