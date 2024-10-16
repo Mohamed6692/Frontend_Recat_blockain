@@ -7,37 +7,38 @@ const Main = ({ walletAddress, setCredits }) => {
     // Styles en ligne
     const styles = {
         container: {
-            margin: 0,
-            padding: 0,
-            boxSizing: 'border-box',
+          margin: 0,
+          padding: 0,
+          boxSizing: 'border-box',
         },
         body: {
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%', // Utilisez vh pour la compatibilité
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh', // Utilisation de vh pour une hauteur relative à l'écran visible
         },
         appContainer: {
-            width: '100%',
-            height: '450px',
-            maxWidth: '390px',
-            borderRadius: '6px',
-            overflow: 'hidden',
-            border: '1px solid #e4e4e7',
+          width: '100%',
+          height: '28.125rem', // Conversion de 450px en rem (450px = 28.125rem)
+          maxWidth: '24rem', // Conversion de 390px en rem (390px = 24rem)
+          borderRadius: '0.375rem', // Conversion de 6px en rem pour la bordure arrondie (6px = 0.375rem)
+          overflow: 'hidden',
+          border: '1px solid #e4e4e7',
         },
         title: {
-            textAlign: 'left', // Aligner le titre à gauche
-            margin: '16px 0',  // Ajoute un peu d'espace autour du titre
-            color: 'white', // Couleur du titre en blanc
+          textAlign: 'left', // Alignement du titre à gauche
+          margin: '1rem 0', // Utilisation de rem pour l'espacement autour du titre (16px = 1rem)
+          color: 'white', // Couleur du titre en blanc
         },
         '@media (max-width: 768px)': {
-            appContainer: {
-                height: '100%',
-                maxWidth: 'unset',
-                borderRadius: '0',
-                border: '0',
-            },
+          appContainer: {
+            height: '100%', // Ajustement de la hauteur à 100% sur petits écrans
+            maxWidth: 'unset', // Suppression de la limite de largeur pour petits écrans
+            borderRadius: '0', // Bordures arrondies désactivées sur petits écrans
+            border: '0', // Suppression de la bordure sur petits écrans
+          },
         },
-    };
+      };
+      
 
     const [isWalletConnected, setIsWalletConnected] = useState(false);
 

@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@simplepay-ai/widget';
 import Main from './SimplePay/Main';
 import Editor from '@monaco-editor/react';
-import './App.css';
+
 
 import Blockchain from './blockchain';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -47,33 +47,34 @@ function MyComponentPage() {
     },
     body: {
       justifyContent: 'center',
-      marginTop:'37px',
+      marginTop: '2.5rem', // Utilisation de rem pour l'espacement vertical
       alignItems: 'center',
-      height: '100%', // Use vh for compatibility
+      height: '100vh', // Utilisation de vh pour garantir la compatibilité sur différentes hauteurs d'écran
     },
     appContainer: {
       width: '100%',
-      height: '474px',
-      maxWidth: '390px',
-      marginTop:'45px',
-      borderRadius: '6px',
+      height: '30rem', // Utilisation de rem pour une hauteur relative
+      maxWidth: '24rem', // Conversion de 390px en rem (24rem pour une meilleure adaptabilité)
+      marginTop: '3rem', // Utilisation de rem pour l'espacement
+      borderRadius: '0.375rem', // Utilisation de rem pour la bordure arrondie
       overflow: 'hidden',
       border: '1px solid #e4e4e7',
     },
     title: {
-      textAlign: 'center', // Align title to the left
-      margin: '16px 0',  // Add some space around the title
-      color: 'white', // Title color in white
+      textAlign: 'center', // Garde l'alignement centré pour le titre
+      margin: '1rem 0', // Utilisation de rem pour l'espacement autour du titre
+      color: 'white', // Couleur du titre en blanc
     },
     '@media (max-width: 768px)': {
       appContainer: {
-        height: '100%',
-        maxWidth: 'unset',
-        borderRadius: '0',
-        border: '0',
+        height: '100%', // Ajustement de la hauteur à 100% sur petits écrans
+        maxWidth: 'unset', // Suppression de la limite de largeur pour les petits écrans
+        borderRadius: '0', // Bordures arrondies désactivées sur petits écrans
+        border: '0', // Suppression de la bordure sur petits écrans
       },
     },
   };
+  
   
 
 
@@ -375,7 +376,7 @@ function MyComponentPage() {
               
               <div className="col-12">
                 <div className="pix d-flex justify-content-center align-items-center flex-column flex-md-row">
-                  <h3 style={{ color: 'white' }}>Crypto</h3>
+                  <h3 style={{ color: 'white' }}>Cryptos</h3>
                   <TooltipIcon />
                 </div>      
                 
@@ -481,7 +482,7 @@ function MyComponentPage() {
                   </div>
                 </div>
                  ) : (
-                <div className="row mt-2">
+                  <div className="row mt-2">
                   {/* Input Section */}
                   <div className="col-lg-6 mb-4">
                     <div className="form-floating mb-3">
@@ -495,16 +496,16 @@ function MyComponentPage() {
                           onChange={(e) => setInputText(e.target.value)}
                           onFocus={() => setLabelActive(true)} // Activer le label au focus
                           onBlur={() => setLabelActive(inputText !== '')} // Garder le label actif si le champ n'est pas vide
-                          style={{ backgroundColor: 'rgb(20, 21, 21)', color: '#34C759', fontSize: '14px' }} // Ajuster la taille de la police globale
+                          style={{ backgroundColor: 'rgb(20, 21, 21)', color: '#34C759', fontSize: '0.875rem' }} // 14px en rem
                         />
                         <style jsx>{`
                           #floatingInput::placeholder {
-                            font-size: 12px; /* Taille spécifique du placeholder */
+                            font-size: 0.75rem; /* 12px en rem */
                             color: #34C759;
                           }
                         `}</style>
-                        <button className="btn btn-outline-secondary" 
-                          onClick={pasteFromClipboard} 
+                        <button className="btn btn-outline-secondary"
+                          onClick={pasteFromClipboard}
                           type="button"
                           title="Paste from clipboard">
                           <i className="bi bi-file-diff-fill"></i>
@@ -513,55 +514,56 @@ function MyComponentPage() {
                     </div>
                     {isAuthenticated ? (
                       <>
-                      <button 
-                      className="btn btn-outline-secondary mb-3" 
-                      style={{ 
-                        width: '300px', 
-                        backgroundColor: 'black', // Couleur de fond noire
-                        color: '#34C759', // Couleur du texte verte
-                        borderColor: '#34C759', // Couleur de la bordure pour correspondre au texte
-                      }} 
-                      onClick={handleProcessText}
-                    >
-                      Get Flattened Code | $2
-                    </button> 
-                    <div className='tablette'>
-                    <Main />
-                    </div> 
-                    </>
-                    
+                        <button
+                          className="btn btn-outline-secondary mb-3"
+                          style={{
+                            width: '100%', // Changer à 100% pour la flexibilité
+                            maxWidth: '300px', // Limiter la largeur maximale
+                            backgroundColor: 'black', // Couleur de fond noire
+                            color: '#34C759', // Couleur du texte verte
+                            borderColor: '#34C759', // Couleur de la bordure pour correspondre au texte
+                          }}
+                          onClick={handleProcessText}
+                        >
+                          Get Flattened Code | $2
+                        </button>
+                        <div className='tablette'>
+                          <Main />
+                        </div>
+                      </>
                     ) : (
                       <>
-                      <button
-                        className="btn btn-outline-secondary mb-3 "
-                        style={{ width: '300px', backgroundColor: 'grey', color: 'white', borderColor: 'grey' }}
-                        disabled
-                      >
-                        Connect Wallet to use
-                      </button>
-
-                      <div style={styles.appContainer}>
-                      <div style={{ padding: '20px', backgroundColor: '#333', color: '#fff' }}>
-                        <h3 style={styles.title}> SymplePay </h3>
-                        
-                      </div>
-                      <div style={styles.body}>
-                        Log in to access SymplePay processing</div>
-                    </div>
+                        <button
+                          className="btn btn-outline-secondary mb-3"
+                          style={{
+                            width: '100%', // Changer à 100% pour la flexibilité
+                            maxWidth: '300px', // Limiter la largeur maximale
+                            backgroundColor: 'grey', 
+                            color: 'white', 
+                            borderColor: 'grey' 
+                          }}
+                          disabled
+                        >
+                          Connect Wallet to use
+                        </button>
+                
+                        <div style={styles.appContainer}>
+                          <div style={{ padding: '1.25rem', backgroundColor: '#333', color: '#fff' }}> {/* 20px en rem */}
+                            <h3 style={styles.title}>SymplePay</h3>
+                          </div>
+                          <div style={styles.body}>
+                            Log in to access SymplePay processing
+                          </div>
+                        </div>
                       </>
-                      
                     )}
-                    {/* <div className='tablette'>
-                    <Main />
-                    </div>        */}
-                    
                   </div>
-
+                
                   {/* Output Section - Styled as Code Editor */}
                   <div className="col-lg-6">
                     <div className="editor-container">
                       <Editor
-                        height="390px"
+                        height="25rem" // 390px en rem
                         width="100%"
                         defaultLanguage="javascript"
                         value={codeOutput}
@@ -573,58 +575,57 @@ function MyComponentPage() {
                         }}
                       />
                     </div>
-
+                
                     {/* Boutons */}
                     <div className="d-flex flex-column flex-md-row justify-content-start mt-2">
-                      <button 
-                        className="btn btn-outline-secondary me-md-2 mb-2 mb-md-0 w-100" 
-                        style={{ 
-                          backgroundColor: 'black', 
-                          color: '#34C759', 
+                      <button
+                        className="btn btn-outline-secondary me-md-2 mb-2 mb-md-0 w-100"
+                        style={{
+                          backgroundColor: 'black',
+                          color: '#34C759',
                           borderColor: '#34C759',
-                        }} 
+                        }}
                         onClick={copyToClipboard}
                       >
                         Copy Code
                       </button>
-                      <button 
-                        className="btn btn-outline-secondary w-100" 
-                        style={{ 
-                          backgroundColor: 'black', 
-                          color: '#34C759', 
+                      <button
+                        className="btn btn-outline-secondary w-100"
+                        style={{
+                          backgroundColor: 'black',
+                          color: '#34C759',
                           borderColor: '#34C759',
-                        }} 
+                        }}
                         onClick={handleRevert}
                       >
                         Revert
                       </button>
                     </div>
-
+                
                     {/* Instructions Box */}
                     <div
                       style={{
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-                        padding: '20px',
-                        borderRadius: '8px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        padding: '1.25rem', // 20px en rem
+                        borderRadius: '0.5rem', // 8px en rem
                         color: 'white',
-                        marginBottom: '20px',
-                        marginTop: '20px',
-                        lineHeight: '1.5', 
+                        marginBottom: '1.25rem', // 20px en rem
+                        marginTop: '1.25rem', // 20px en rem
+                        lineHeight: '1.5',
                         textAlign: 'left',
                       }}
                     >
-                      <h4 style={{ marginLeft: '10px' }}>Instructions for SimplePay</h4>
+                      <h4 style={{ marginLeft: '0.625rem' }}>Instructions for SimplePay</h4> {/* 10px en rem */}
                       <ol>
-                        <li style={{ marginLeft: '10px' }}>Step 1: Enter the required code in the input field.</li>
-                        <li style={{ marginLeft: '10px' }}>Step 2: Click the "Process Text" button to process your input.</li>
-                        <li style={{ marginLeft: '10px' }}>Step 3: Use the "Copy Code" button to copy the output code.</li>
-                        <li style={{ marginLeft: '10px' }}>Step 4: You can revert the changes using the "Revert" button.</li>
+                        <li style={{ marginLeft: '0.625rem' }}>Step 1: Enter the required code in the input field.</li>
+                        <li style={{ marginLeft: '0.625rem' }}>Step 2: Click the "Process Text" button to process your input.</li>
+                        <li style={{ marginLeft: '0.625rem' }}>Step 3: Use the "Copy Code" button to copy the output code.</li>
+                        <li style={{ marginLeft: '0.625rem' }}>Step 4: You can revert the changes using the "Revert" button.</li>
                       </ol>
                     </div>
-                  </div>       
-                </div>
+                  </div>
+                </div>        
                 )}
-
               </div>
             </div>
           </div>
