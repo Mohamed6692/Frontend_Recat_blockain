@@ -9,6 +9,7 @@ const AccesLogin = () => {
         container: {
           margin: 0,
           padding: 0,
+          marginTop: '4rem',
           boxSizing: 'border-box',
         },
         body: {
@@ -25,9 +26,11 @@ const AccesLogin = () => {
           border: '1px solid #e4e4e7',
         },
         title: {
-          textAlign: 'left', // Alignement du titre à gauche
-          margin: '1rem 0', // Utilisation de rem pour l'espacement autour du titre (16px = 1rem)
           color: 'white', // Couleur du titre en blanc
+          textAlign: 'center',
+          backgroundColor: '#c7abab8a',
+          padding: '1rem 0 1rem 0', // Padding supérieur
+          width: '100%', 
         },
         title2: {
             textAlign: 'center', // Alignement du titre à gauche
@@ -48,9 +51,9 @@ const AccesLogin = () => {
 
     return (
         <div style={styles.container}>
-            <h4 style={styles.title}>SimplePay</h4> {/* Titre aligné à gauche */}
             <div style={styles.body}>
                 <div style={styles.appContainer}>
+                <h4 style={styles.title}>SimplePay</h4>
                  <p style={styles.title2}>Log in to access SymplePay processing</p>
                 </div>
             </div>
