@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@simplepay-ai/widget';
 import Main from './SimplePay/Main';
 import Editor from '@monaco-editor/react';
+import axios from 'axios';
 
 
 import Blockchain from './blockchain';
@@ -76,8 +77,6 @@ function MyComponentPage() {
     },
   };
   
-  
-
 
   const [inputText, setInputText] = useState('');
   const [codeOutput, setCodeOutput] = useState('');
@@ -89,6 +88,9 @@ function MyComponentPage() {
   const [credits, setCredits] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  const [adressWallet, setadressWallet] = useState(null);
+
   const toast = useToast();
   const handleSetCredits = (newCredits) => {
     setCredits(newCredits);
@@ -118,7 +120,34 @@ function MyComponentPage() {
   };
 
   
-  const handleProcessText = () => {
+  // const handleProcessText = () => {
+  //   if (credits < 2) {
+  //     console.log(credits);
+  //     // Afficher un toast d'erreur si les crédits sont insuffisants
+  //     toast({
+  //       title: 'Erreur',
+  //       description: 'Not enough credits to perform the action, please purchase credits to continue.',
+  //       status: 'error',
+  //       duration: 5000,
+  //       isClosable: true,
+  //       position: 'top',
+  //     });
+  //   } else {
+  //     // Logique de traitement ici
+  //     console.log("Traitement en cours...");
+  //     const formattedText = inputText; // Récupérer le texte d'entrée
+  //     setCodeOutput(formattedText); // Mettre à jour la zone de code avec le texte formaté
+  //     setCredits(credits - 2); // Déduire les crédits
+  //   }
+  // };
+
+
+
+
+
+
+
+  const handleProcessText = async () => {
     if (credits < 2) {
       console.log(credits);
       // Afficher un toast d'erreur si les crédits sont insuffisants
@@ -135,9 +164,45 @@ function MyComponentPage() {
       console.log("Traitement en cours...");
       const formattedText = inputText; // Récupérer le texte d'entrée
       setCodeOutput(formattedText); // Mettre à jour la zone de code avec le texte formaté
-      setCredits(credits - 2); // Déduire les crédits
+  
+      // Débiter les crédits
+      try {
+        const response = await axios.post('http://localhost:3000/api/debitUserCredits', {
+          walletAddress: adressWallet, // Assurez-vous que addressWallet contient l'adresse correcte
+          amount: 2,
+        });
+  
+        // Vérifier la réponse
+        if (response.status === 200) {
+          setCredits(response.data.credits); // Mettre à jour les crédits
+        } else {
+          toast({
+            title: 'Erreur',
+            description: response.data.message,
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+            position: 'top',
+          });
+        }
+      } catch (error) {
+        console.error('Error debiting credits:', error);
+        toast({
+          title: 'Erreur',
+          description: 'An error occurred while debiting credits.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+          position: 'top',
+        });
+      }
     }
   };
+  
+
+
+
+
   
 
   const copyToClipboard = () => {
@@ -293,7 +358,11 @@ function MyComponentPage() {
                   )}
                   <li className="nav-item" style={{ margin: '0px' ,marginRight: '3px'}}>
                     <a className="page-scroll active" href="#list-crytpo">
-                    <ConnectWallet setCredits={handleSetCredits} setIsAuthenticated={setIsAuthenticated}/>
+                    <ConnectWallet 
+                    setCredits={handleSetCredits} 
+                    setIsAuthenticated={setIsAuthenticated}
+                    adressWallet={adressWallet} // Passe adressWallet en tant que prop
+                    setadressWallet={setadressWallet} />
                     </a>
                   </li>
                   

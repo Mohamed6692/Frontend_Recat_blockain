@@ -85,6 +85,43 @@ app.get('/api/getUserCredits', async (req, res) => {
   }
 });
 
+// Route pour débiter les crédits de l'utilisateur
+app.post('/api/debitUserCredits', async (req, res) => {
+  
+  const { walletAddress, amount } = req.body;
+  console.log('address');
+  console.log(walletAddress);
+  console.log(amount);
+  if (!walletAddress || typeof amount !== 'number' || amount <= 0) {
+    return res.status(400).json({ message: 'Invalid request.' });
+  }
+
+  const uid = `wallet-${walletAddress}`;
+
+  try {
+    const userRef = db.collection('users').doc(uid);
+    const userDoc = await userRef.get();
+
+    if (userDoc.exists) {
+      const { credits } = userDoc.data();
+
+      // Vérifier si l'utilisateur a suffisamment de crédits
+      if (credits < amount) {
+        return res.status(400).json({ message: 'Not enough credits.' });
+      }
+
+      // Débiter les crédits
+      await userRef.update({ credits: credits - amount });
+      res.json({ message: 'Credits debited successfully', credits: credits - amount });
+    } else {
+      res.status(404).json({ message: 'User not found.' });
+    }
+  } catch (error) {
+    console.error("Error debiting credits:", error);
+    res.status(500).send("Server error");
+  }
+});
+
 
 // Route pour mettre à jour les crédits d'un utilisateur existant
 app.post('/api/updateUserCredits', async (req, res) => {

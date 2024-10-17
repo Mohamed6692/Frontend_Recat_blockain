@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 
 
-const ConnectWallet = ({ setCredits, credits, setIsAuthenticated }) => {
+const ConnectWallet = ({ setCredits, credits, setIsAuthenticated,adressWallet, setadressWallet}) => {
   const [walletAddress, setWalletAddress] = useState(null);
   const [error, setError] = useState(null);
   const [isWalletConnected, setIsWalletConnected] = useState(false); // État pour vérifier la connexion du portefeuille
@@ -40,7 +40,6 @@ const ConnectWallet = ({ setCredits, credits, setIsAuthenticated }) => {
       const response = await axios.get(`http://localhost:3000/api/getUserCredits?walletAddress=${walletAddress}`);
       const { credits } = response.data;
       setCredits(credits);
-      console.log('Credits momo: ', credits);
     } catch (error) {
       console.error("Erreur lors de la récupération des crédits:", error);
     }
@@ -96,6 +95,7 @@ const ConnectWallet = ({ setCredits, credits, setIsAuthenticated }) => {
         setWalletAddress(address);
         await authenticateWithFirebase(address);
         await fetchCredits(address);
+        setadressWallet(address);
         // checkCreditsAfterPurchase(address); // Vérifiez les crédits après la connexion
       } catch (error) {
         alert('Wallet connection error. Make sure MetaMask is installed and you are logged in.');
